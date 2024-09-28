@@ -1,112 +1,111 @@
-﻿telnet client class
+﻿telnet 客户端类
 
-◆ これは何?
-PowerSehll (v5 以降) で使用できる telnet client class です。
-ネットワーク機器等 telnet を使用して設定する機器を自動設定するのに使えます。
+◆ 这是什么？
+可与 PowerSehll（v5 及更高版本）一起使用的 telnet 客户端类。
+它可用于自动配置设备，例如使用 telnet 配置的网络设备。
 
-◆ 何が出来るの?
-・機器に対する telnet 接続
-・コマンド送信(login / logoff 含む)
-・コマンド送信結果受信
-・切断
+◆ 你能做什么？
+・与设备的 Telnet 连接
+・发送命令（包括登录/注销）
+・接收命令发送结果
+·切割
 
-◆ 出来ない事
-・機器の自動設定 ww
-telnet client 機能しか実装していないので、自動設定に必要な処理は自分で書く必要があります。
-この class を継承して機器用のカスタムクラスを作るのもよし、この telnet client class をそのまま使ってスクリプトを書くもよし
+◆ 不能做的事
+・自动设备设置ww
+由于它只实现了telnet客户端功能，因此您需要自己编写自动配置所需的处理。
+您可以通过继承此类来为您的设备创建自定义类，也可以按原样使用此 telnet 客户端类编写脚本。
 
-◆ クラス メンバー説明
-・コンストラクタ
-	TelnetClient()
-	TelnetClient(string, int)
-		指定ノードへ接続する
-			string : 接続先 IP またはホスト名
-			int: ポート番号
+◆ 班级成员说明
+·构造函数
+	Telnet客户端()
+	TelnetClient（字符串，整数）
+		连接到指定节点
+			string : 连接目标 IP 或主机名
+			int：端口号
 
-・public メソッド
-	# 接続
-	[void] Connect(string, int)
-		指定ノードへ接続する
-			string : 接続先 IP またはホスト名
-			int: ポート番号
+・公开方法
+	＃ 联系
+	[无效] 连接（字符串，整数）
+		连接到指定节点
+			string : 连接目标 IP 或主机名
+			int：端口号
 
-	# 切断
-	[void] DisConnect()
-		接続中ノードから切断する
-		(logoff 等の処理ではなく TCP レベル切断)
+	# 断开连接
+	[无效] 断开连接()
+		与已连接的节点断开连接
+		（TCP级别断开连接而不是注销等处理）
 
-	# 送信
-	[void] Send(string, bool)
-		コマンドを送信する
-			string : 送信するコマンド
-			bool : 送信コマンドをログ記録出力するか否か
-				$true : 出力する
-				$false : 出力しない(**** がログに記録される)
+	＃ 发送
+	[无效] 发送（字符串，布尔）
+		发送命令
+			string : 要发送的命令
+			bool: 是否记录发送命令
+				$true：输出
+				$false ：无输出（**** 已记录）
 
-	# 受信
-	[string[]] Receive(string)
-		受信する(telnet ネゴシエーションもこの中で実現されている)
-		受信内容はログに記録されます
-			string : 待ち受けするプロンプト
-			このプロンプトが受信されるまで受信を待ち続ける(タイムアウト:30秒)
+	＃ 收到
+	[字符串[]]接收（字符串）
+		接收（这里也实现了telnet协商）
+		接收到的内容记录在日志中
+			string : 监听的提示
+			继续等待，直到收到此提示（超时：30 秒）
 
-	# 環境設定変更
-	[void] SetEnvironment(string, bool, int, bool, bool)
-		動作環境を変更する
-			string : ログファイルのフルパス($null をセットすると default が使用される)
-				default : スクリプトパス telnet_YYYY-MMDD.log
-			bool : ログ保存抑制
-					$false : ログ保存する
-					$true : ログ保存しない(表示はする)
-					default : $false
-			int : タイムアウト(秒)
-				default : 30
-			bool : ネゴシエーション/プロンプト待ち状態をログに出力するか否か
-				$true : ログに出力する
-				$false : ログに出力しない
-				default : $false
-			bool : 開発用 debug をログに出力するか否か
-				$true : ログに出力する
-				$false : ログに出力しない
-				default : $false
+	# 更改环境设置
+	[void] SetEnvironment（字符串，布尔，整数，布尔，布尔）
+		改变运行环境
+			string ：日志文件的完整路径（如果设置了 $null，则使用默认值）
+				默认：脚本路径 telnet_YYYY-MMDD.log
+			bool : 禁止日志保存
+					$false : 保存日志
+					$true：不保存日志（显示它们）
+					默认值：$false
+			int：超时（秒）
+				默认值：30
+			bool: 是否输出协商/提示等待状态到日志
+				$true ：输出到日志
+				$false : 不输出到日志
+				默认值：$false
+			bool: 是否将开发调试输出到日志
+				$true ：输出到日志
+				$false : 不输出到日志
+				默认值：$false
 
-	# ログ出力
-	[string] Log(string)
-		ログ出力する
-			string : ログ出力メッセージ
+	# 日志输出
+	[字符串] 日志（字符串）
+		输出日志
+			string : 日志输出消息
 
-・public プロパティ
-	なし
+・公共财产
+	没有任何
 
-◆ 使い方
-	TelnetClient クラスをそのまま使うか、継承したカスタムクラスを作って下さい
-	動かす時には、TelnetClient.ps1 と DecisionTable.csv を同一フォルダに置いてください
+◆ 使用方法
+	请按原样使用 TelnetClient 类或创建继承它的自定义类。
+	运行时，请将TelnetClient.ps1和DecisionTable.csv放在同一文件夹中。
 
-◆ files
-	TelnetClient.ps1
-		Telnet Client class 本体
+◆ 文件
+	Telnet客户端.ps1
+		Telnet 客户端类主体
 
-	DecisionTable.csv
-		動作制御用デシジョンテーブル データ
+	决策表.csv
+		运动控制决策表数据
 
-	ReadMe.txt
-		このファイル
+	自述文件.txt
+		这个文件
 
-	sample1.ps1
-		Telnet Client class を裸で使う場合の実装サンプル
+	样本1.ps1
+		使用裸 Telnet Client 类时的实现示例
 
-	sample2.ps1
-		Telnet Client class を継承する場合の実装サンプル
+	样本2.ps1
+		继承Telnet Client类时的实现示例
 
-	sample2Class.ps1
-		Telnet Client class 継承サンプル(sample2.ps1 で使っている)
+	样本2Class.ps1
+		Telnet Client 类继承示例（在sample2.ps1 中使用）
 
-	デシジョンテーブル.xlsx
-		人が見る用の動作制御用デシジョンテーブル
+	决策表.xlsx
+		人类可视的运动控制决策表
 
-	メソッド構造.txt
-		内部で呼んでいるメソッドのツリー構造
+	方法结构.txt
+		内部调用方法的树形结构
 
-	memo.txt
-		telnet ネゴシエーション 動作メモ
-
+	备忘录.txt
+		Telnet协商操作备忘录
